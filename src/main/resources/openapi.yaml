@@ -1,0 +1,277 @@
+openapi: 3.0.0
+x-stoplight:
+  id: ym7dyqxs1pkpb
+info:
+  title: MyFridzs API
+  description: The whole api in one definition file.
+  version: 1.0.0
+  contact:
+    name: Hoffman Bence
+    email: benoero@gmail.com
+servers:
+  - url: 'http://localhost:8080'
+    description: Localhost url
+  - url: 'https://myfridzs.herokuapp.com'
+    description: Best hosting server HEROKU!!
+tags:
+  - name: fridge
+    description: Fridge manager endpoints.
+paths:
+  /user:
+    get:
+      summary: Get all users
+      tags: [ ]
+      responses:
+        '200':
+          $ref: '#/components/responses/UserList'
+      operationId: get-person
+      description: ''
+    parameters: [ ]
+    post:
+      summary: Create user
+      operationId: post-user
+      responses:
+        '201':
+          $ref: '#/components/responses/UserSingle'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+  '/user/{userId}':
+    parameters:
+      - $ref: '#/components/parameters/userId'
+    get:
+      summary: Get user by ID
+      tags: [ ]
+      responses:
+        '200':
+          $ref: '#/components/responses/UserSingle'
+        '404':
+          description: Not Found
+      operationId: get-user-userId
+    delete:
+      summary: Delete user by ID
+      operationId: delete-user-userId
+      responses:
+        '204':
+          description: No Content
+        '404':
+          description: Not Found
+  /fridge:
+    get:
+      summary: Get all fridges
+      tags: [ ]
+      responses:
+        '200':
+          $ref: '#/components/responses/FridgeList'
+      operationId: get-fridge
+      description: ''
+    post:
+      summary: Create fridge
+      operationId: post-fridge
+      responses:
+        '201':
+          $ref: '#/components/responses/FridgeSingle'
+        '400':
+          description: Bad Request
+      description: ''
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Fridge'
+        description: ''
+  '/fridge/{fridgeId}':
+    parameters:
+      - $ref: '#/components/parameters/fridgeId'
+    get:
+      summary: Get fridge by ID
+      tags: [ ]
+      responses:
+        '200':
+          $ref: '#/components/responses/FridgeSingle'
+        '404':
+          description: Not Found
+      operationId: get-fridge-fridgeId
+      description: ''
+    delete:
+      summary: Delete fridge by ID
+      operationId: delete-fridge-fridgeId
+      responses:
+        '204':
+          description: No Content
+        '404':
+          description: Not Found
+      description: ''
+  /food:
+    get:
+      tags:
+        - fridge
+      summary: Get all foods
+      description: ''
+      operationId: GetFoods
+      responses:
+        '200':
+          $ref: '#/components/responses/FoodList'
+    post:
+      summary: Register new food item in selected fridge.
+      operationId: post-fridge-fridgeId-food
+      responses:
+        '201':
+          $ref: '#/components/responses/FoodSingle'
+        '400':
+          description: Bad Request
+      description: ''
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Food'
+    parameters: [ ]
+  '/food/{foodId}':
+    parameters:
+      - $ref: '#/components/parameters/foodId'
+    get:
+      summary: Get food by ID
+      tags: [ ]
+      responses:
+        '200':
+          $ref: '#/components/responses/FoodSingle'
+        '404':
+          description: Not Found
+      operationId: get-fridge-fridgeId-food-foodId
+      description: ''
+    delete:
+      summary: Delete food by ID
+      operationId: delete-fridge-fridgeId-food-foodId
+      responses:
+        '204':
+          description: No Content
+        '404':
+          description: Not Found
+      description: ''
+components:
+  schemas:
+    User:
+      title: Person
+      x-stoplight:
+        id: 1cak0gk2u491f
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+          x-stoplight:
+            id: q91c9gyuj8bnk
+      required:
+        - id
+        - name
+    Fridge:
+      title: Fridge
+      x-stoplight:
+        id: h388pyhp5dsff
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+          x-stoplight:
+            id: 4ovqs0bnnhtob
+      required:
+        - id
+        - name
+    Food:
+      type: object
+      x-stoplight:
+        id: frm83ht4o5ay7
+      title: Food
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+          x-stoplight:
+            id: guwdmu642aljv
+        userId:
+          type: integer
+          x-stoplight:
+            id: vdiurojkvz6u4
+      required:
+        - id
+        - name
+  responses:
+    Unauthorized:
+      description: Example response
+      content: { }
+    FoodSingle:
+      description: Example response
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Food'
+        application/xml:
+          schema:
+            type: object
+            properties: { }
+    FoodList:
+      description: Example response
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/Food'
+        application/xml:
+          schema:
+            type: object
+            properties: { }
+    FridgeList:
+      description: Example response
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/Fridge'
+    FridgeSingle:
+      description: Example response
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Fridge'
+    UserSingle:
+      description: Example response
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/User'
+    UserList:
+      description: Example response
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/User'
+  parameters:
+    fridgeId:
+      name: fridgeId
+      in: path
+      required: true
+      schema:
+        type: number
+    foodId:
+      name: foodId
+      in: path
+      required: true
+      schema:
+        type: number
+    userId:
+      name: userId
+      in: path
+      required: true
+      schema:
+        type: number

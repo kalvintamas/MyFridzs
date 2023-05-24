@@ -16,12 +16,52 @@
     <properties>
         <java.version>17</java.version>
         <kotlin.version>1.8.21</kotlin.version>
+        <openapi-generator-maven-plugin.version>6.6.0</openapi-generator-maven-plugin.version>
+        <jackson-databind-nullable.version>0.2.1</jackson-databind-nullable.version>
+        <springfox-swagger2.version>2.9.2</springfox-swagger2.version>
+        <jakarta.validation-api.version>3.0.2</jakarta.validation-api.version>
+        <springdoc-openapi-starter-webmvc-ui.version>2.1.0</springdoc-openapi-starter-webmvc-ui.version>
     </properties>
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.data</groupId>
+            <artifactId>spring-data-jpa</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springdoc</groupId>
+            <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+            <version>${springdoc-openapi-starter-webmvc-ui.version}</version>
+        </dependency>
+        
+        <dependency>
+            <groupId>com.fasterxml.jackson.module</groupId>
+            <artifactId>jackson-module-kotlin</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>jakarta.validation</groupId>
+            <artifactId>jakarta.validation-api</artifactId>
+            <version>${jakarta.validation-api.version}</version>
+        </dependency>
+
         <dependency>
             <groupId>org.jetbrains.kotlin</groupId>
             <artifactId>kotlin-reflect</artifactId>
@@ -31,11 +71,6 @@
             <artifactId>kotlin-stdlib</artifactId>
         </dependency>
 
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-test</artifactId>
-            <scope>test</scope>
-        </dependency>
     </dependencies>
 
     <build>
@@ -64,6 +99,33 @@
                         <version>${kotlin.version}</version>
                     </dependency>
                 </dependencies>
+            </plugin>
+            <plugin>
+                <groupId>org.openapitools</groupId>
+                <artifactId>openapi-generator-maven-plugin</artifactId>
+                <version>${openapi-generator-maven-plugin.version}</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                        <configuration>
+                            <inputSpec>
+                                ${project.basedir}/src/main/resources/openapi.yaml
+                            </inputSpec>
+                            <generatorName>kotlin-spring</generatorName>
+                            <apiPackage>hu.myfridzs.myfridzs.rest</apiPackage>
+                            <modelPackage>hu.myfridzs.myfridzs.model</modelPackage>
+                            <generateSupportingFiles>false</generateSupportingFiles>
+                            <configOptions>
+                                <useTags>true</useTags>
+                                <interfaceOnly>true</interfaceOnly>
+                                <skipDefaultInterface>true</skipDefaultInterface>
+                                <useSpringBoot3>true</useSpringBoot3>
+                            </configOptions>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>
